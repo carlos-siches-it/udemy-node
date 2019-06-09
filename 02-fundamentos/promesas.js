@@ -36,7 +36,11 @@ let getSalario = (empleado) => {
         if (!salarioDB) {
             reject(`no se encontro un salario para el empleado ${empleado.nombre}`)
         } else {
-            resolve(salarioDB)
+            resolve({
+                nombre: empleado.nombre,
+                salario: salarioDB.salario,
+                id: empleado.id
+            })
         }
     })
 
@@ -47,18 +51,29 @@ let getSalario = (empleado) => {
 
 
 
-getEmpleado(3).then(
-    empleado => {
-        //console.log(`empleado de BDs`, empleado)
+// getEmpleado(10).then(
+//     empleado => {
+//         //console.log(`empleado de BDs`, empleado)
 
-        getSalario(empleado).then(salario => {
-                console.log(`empleado ${empleado.nombre}, salario ${salario.salario}`)
+//         getSalario(empleado).then(salario => {
+//                 console.log(`empleado ${empleado.nombre}, salario ${salario.salario}`)
 
-            },
-            (err) => { console.log(err) }
-        )
+//             },
+//             (err) => { console.log(err) }
+//         )
 
 
-    },
-    (err) => { console.log(err) }
-)
+//     },
+//     (err) => { console.log(err) }
+// )
+
+getEmpleado(12).then(empleado => {  
+    return getSalario(empleado);
+})
+.then(resp => {
+    console.log(resp)
+    //console.log(`el salario de ${empleado.nombre} es de ${resp.salario}`)
+})
+.catch(err => {
+    console.log(err)
+})
