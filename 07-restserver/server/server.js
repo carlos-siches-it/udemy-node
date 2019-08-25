@@ -11,7 +11,10 @@ app.use(bodyParser.json())
 app.use(require("./routes/usuario"))
 
 
-mongoose.connect('mongodb://localhost:27017/cafe', {useNewUrlParser: true}, (err, res)=>{
+mongoose.connect(
+    process.env.URLDB, 
+    {useNewUrlParser: true, useCreateIndex: true}, 
+    (err, res)=>{
     if (err) throw err
     
     console.log("Database on line")

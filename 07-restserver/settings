@@ -1,0 +1,4 @@
+User: mongodb_service
+Pass: PlZDdao6xc3JhxSQ
+cluster0-shard-00-01-vzarv.mongodb.net:27017/cafe
+mongodb+srv://mongodb_service:<password>@cluster0-vzarv.mongodb.net/test

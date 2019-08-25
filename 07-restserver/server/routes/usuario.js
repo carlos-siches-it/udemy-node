@@ -14,13 +14,28 @@ const _ = require("underscore")
 app.get('/usuario', function (req, res) {
 
     let desde = req.query.desde || 0
-    console.log(desde);
+    desde = Number(desde)
 
+    let limite = req.query.limite || 0
+    limite = Number(limite)    
+    
 
-    Usuario.find({ }).exec((err, usuarios) => {
+    //Lista de Campos que se requiere enviar.
+    Usuario.find({ estado:true }, "nombre email role estado google img")
+        .skip(desde)
+        .limit(limite)
+        .exec((err, usuarios) => {
         if (err) {
             res.status(400).json({ok: false, err})
         }
+
+        Usuario.count({estado:true}, (err, total )=> {
+
+            return res.json({ok: true, usuarios, total})
+
+        })
+
+        
 
     })
 
@@ -114,8 +129,45 @@ app.put('/usuario/:id', function (req, res) {
 
 })
   
-app.delete('/usuario', function (req, res) {
-res.json('delete usuario')
+app.delete('/usuario/:id', function (req, res) {
+
+    let id = req.params.id
+
+    let ObjectBody = {estado: false}
+
+    
+    Usuario.findByIdAndUpdate(id, ObjectBody, {new: true}, (err, usuarioDeleted)=> {
+    //Usuario.findByIdAndDelete(id, (err, usuarioDeleted)=> {
+
+        if (err) {
+            return res.status(400).json({
+                ok: false, err
+            })
+        }
+
+        if (!usuarioDeleted) {
+            return res.status(400).json({
+                ok: false, err: {
+                    message: "Usuario No Encontrado"
+
+                }
+            })
+
+
+        }
+
+        res.json({
+            ok: true, usuario: usuarioDeleted
+        })
+
+
+    })
+
+
+
+
+
+    //res.json('delete usuario')
 })
 
 
